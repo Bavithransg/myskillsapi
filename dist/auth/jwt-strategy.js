@@ -38,9 +38,8 @@ let JwtStrategy = class JwtStrategy extends Passport_1.PassportStrategy(passport
     validate(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('payload', payload);
-            const { username, name } = payload;
+            const { name } = payload;
             console.log('name', name);
-            console.log('username', username);
             const user = yield this.userRepository.findOne({ name });
             console.log('user', user);
         });

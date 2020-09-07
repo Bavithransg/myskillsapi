@@ -1,35 +1,43 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, ObjectIdColumn } from "typeorm";
+import { BaseEntity, Entity, Column, Unique, OneToMany, CreateDateColumn, UpdateDateColumn, ObjectIdColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { IsString } from "class-validator";
+import { Student } from '../students/student.entity';
 
 @Entity()
 export class User extends BaseEntity {
-    //@PrimaryGeneratedColumn()
-    @ObjectIdColumn()
-    id: number;
+  @ObjectIdColumn()
+  id: number;
 
-    @Column()
-    name: string;
-    
-    @Column()
-    @Unique('email', ['email'])
-    email: string;
+  @Column()
+  name: string;
 
-    @Column()
-    password: string;
+  @Column()
+  @Unique('email', ['email'])
+  email: string;
 
-    @Column()
-    @Unique('nric', ['nric'])
-    nric: string;
+  @Column()
+  password: string;
 
-    @Column()
-    salt: string;
+  @Column()
+  salt: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @Column()
+  @Unique('nric', ['nric'])
+  nric: string;
 
-    async validatePassword(password: string): Promise<boolean> {
-        const hash = await bcrypt.hash(password, this.salt);
-        return hash === this.password;
-    }
+  @Column()
+  status: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  modifiedAt: Date;
+
+  @OneToMany(type => Student, student => student.userid, { eager: true })
+  students: Student[];
+
+  async validatePassword(password: string): Promise<boolean> {
+    const hash = await bcrypt.hash(password, this.salt);
+    return hash === this.password;
+  }
 }
