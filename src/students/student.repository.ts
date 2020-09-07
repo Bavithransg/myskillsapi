@@ -62,7 +62,6 @@ export class StudentRepository extends Repository<Student> {
         const field = error.message.split(": { ");
         const fieldKey = field[1].split(":");
         const valKey = fieldKey[0];
-        console.log('error input field', valKey);
         if(error.code === 11000 && valKey=='nric') { //duplicate nric number
             throw new ConflictException('Student NRIC already exist.');
         }
